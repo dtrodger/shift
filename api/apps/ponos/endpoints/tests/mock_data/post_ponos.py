@@ -1,0 +1,51 @@
+payload_1 = {
+    "data": {
+        "attributes": {
+            "address": "1033 W. Loyola",
+            "description": "Full financial my. Question change real quickly week senior through she. Cold ten environment cold.",
+            "city": "Chicago",
+            "state": "Illinois",
+            "postal_code": "60626",
+            "country": "United States",
+            "time_slots": [
+                {
+                    "data": {
+                        "attributes": {
+                            "label": "First",
+                            "start": "2018-03-23 18:12:07.037000",
+                            "end": "2018-03-23 23:12:07.037000"
+                        },
+                        "type": "time_slots"
+                    }
+                },
+                {
+                    "data": {
+                        "attributes": {
+                            "label": "Second",
+                            "start": "2018-04-19 17:12:07.037000",
+                            "end": "2018-04-19 23:12:07.037000"
+                        },
+                        "type": "time_slots"
+                    }
+                }
+            ],
+            "labels": [
+                "police",
+                "local",
+                "color",
+                "those",
+                "traditional",
+                "director",
+                "for",
+                "even"
+            ]
+        },
+        "type": "shift",
+        "links": {
+            "self": "/ponos/shift"
+        }
+    },
+    "links": {
+        "self": "/ponos/shift"
+    }
+}

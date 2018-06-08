@@ -1,0 +1,41 @@
+# Credit to https://github.com/pallets/flask/blob/master/.gitignore
+.DS_Store
+.env
+.flaskenv
+*.pyc
+*.pyo
+env/
+env*
+dist/
+build/
+*.egg
+*.egg-info/
+_mailinglist
+.tox/
+.cache/
+.pytest_cache/
+.idea/
+docs/_build/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+*,cover
+
+# Environment configuration
+api/apps/config.env
+
+# Api logs
+api/manager/logs/*.log
+
+# Nginx logs
+nginx/logs/*.log
+
+# Virtualenvs
+api/env
+
+# PyCharm
+.idea
+
+
