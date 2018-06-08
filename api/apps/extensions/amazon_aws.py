@@ -31,10 +31,10 @@ def sqs_connection(config):
         Return:
             sns_con (boto.sqs.connection.SQSConnection)
         """
-    sns_con = sqs.connect_to_region(config['AWS_REGION'], aws_access_key_id=config['AWS_ACCESS_KEY_ID'],
+    sqs_con = sqs.connect_to_region(config['AWS_REGION'], aws_access_key_id=config['AWS_ACCESS_KEY_ID'],
                                     aws_secret_access_key=config['AWS_SECRET_ACCESS_KEY'])
 
-    return sns_con
+    return sqs_con
 
 
 # Restrict module imports to exclude sns and sqs

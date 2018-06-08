@@ -6,7 +6,7 @@ import unittest
 from flask import current_app, url_for
 from flask_testing import TestCase
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../')))
 
 from api.apps import create_app
 from api.apps.ponos.utilities.mock_data import mock_shift_data, drop_ponos_collections
@@ -57,7 +57,6 @@ class PonosShiftEndpointTests(TestCase):
     def test_post_shift(self):
         resp = self.client.post(url_for('ponos'), data=json.dumps(payload_1), headers=self.headers)
         self.assert200(resp)
-
         # TODO - Test more cases
 
 
