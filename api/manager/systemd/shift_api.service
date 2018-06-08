@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve shift api
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/apps/api
+Environment="PATH=/home/ubuntu/apps/api/env/bin"
+ExecStart=/home/shiftgig/apps/api/env/bin/uwsgi --ini wsgi.ini
+
+[Install]
+WantedBy=multi-user.target
