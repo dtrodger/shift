@@ -82,6 +82,7 @@ def db_clear():
 @app.cli.command()
 @click.option('--app-config', default='develop', help='Application configuration context', required=False)
 @click.option('--action', default='start', help='Daemon execution options', required=False)
-def worker_ponos(action, app_config):
+@click.option('--pid', default='/tmp/ponosdaemon.pid', help='Daemon execution options', required=False)
+def worker_ponos(action, app_config, pid):
     """Ponos worker manager"""
-    cli_worker_ponos(action, app_config)
+    cli_worker_ponos(app_config, action, pid)
