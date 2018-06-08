@@ -15,19 +15,19 @@ class Queue(object):
     API for queue CRUD operations. Meant to be inherited by microservice queue class.
     Note that this class is designed to handle management of a SQS q and SNS topic.
     """
-    def __init__(self, sns_topic, sqs_queue):
+    def __init__(self, sns_topic, sns_q):
         # Get Flask application configuration.
         self.config = current_app.config
         self.redis_cache = redis_cache.get_api()
 
         # Initialize SQS Client and set other relevant attributes.
         self.sqsconn = sqs_connection(self.config)
-        self.queue = self.sqsconn.get_queue(sqs_queue)
+        self.queue = self.sqsconn.get_queue(sns_q)
 
         # Initialize SNS Client
         self.snsconn = sns_connection(self.config)
-        self.sns_message = RawMessage
         self.sns_topic = sns_topic
+        self.sns_message = RawMessage
 
     def create_job(self, cache_id, job_type, cache_attrs):
         """
@@ -76,6 +76,7 @@ class Queue(object):
             (list): SQS RawMessages if successful (False) if not successful
         """
         try:
+            current_app.logger.info(self.queue)
             self.queue.set_message_class(self.sns_message)
             messages = self.sqsconn.receive_message(self.queue, number_messages=10, wait_time_seconds=6,
                                                 visibility_timeout=12)

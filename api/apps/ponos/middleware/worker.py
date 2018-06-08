@@ -14,7 +14,7 @@ from api.apps.ponos.middleware.db import PonosDB
 from api.apps.ponos.middleware.queue import PonosQueue
 
 
-log_file = os.path.abspath(os.path.join(os.getcwd(), '../api/manager/logs/ponos-worker.log'))
+log_file = os.path.abspath(os.path.join(os.getcwd(), '../manager/logs/ponos-worker.log'))
 logging.basicConfig(filename=log_file, level=logging.INFO)
 
 
@@ -25,11 +25,7 @@ class PonosWorker(Daemon):
 
     def __init__(self, app_config, *args, **kwargs):
         Daemon.__init__(self, *args, **kwargs)
-
         self.app_config = app_config
-        # Set required middleware APIs.
-        self.ponos_db = PonosDB()
-        self.ponos_q = PonosQueue()
 
     def run(self, *args, **kwargs):
         # Run single thread
@@ -40,37 +36,42 @@ class PonosWorker(Daemon):
         Daemon.stop(self)
 
     def execute(self, app_config):
-        app = create_app()
-        app.logger.info(app_config)
+        app = create_app(app_config)
         with app.app_context():
             try:
+                ponos_db = PonosDB()
+                ponos_q = PonosQueue()
                 while True:
-                    self.work_jobs(app.logger)
-                    time.sleep(1)
+                    self.work_jobs(ponos_db, ponos_q, app.logger)
+                    time.sleep(3)
             except Exception as e:
                 app.logger.error('PonosWorker - {}'.format(e.message))
 
-    def work_jobs(self, logger):
+    def work_jobs(self, ponos_db, ponos_q, logger):
         """
         Pulls Redis cache id from SQS, gets Redis record, deserialize record, saves record into Mongo database.
         """
         # Get jobs from queue.
         # TODO - Rethink architecture. Attempting to pull jobs from an empty queue every seconds is not efficient.
-        jobs = self.ponos_q.get_jobs()
+        jobs = ponos_q.get_jobs()
 
         for job in jobs:
             # Deserialize Redis cache record.
             json_api_resource = ast.literal_eval(job[0])
 
             # Get job type
-            job_type = self.ponos_q.get_job_type(job)
+            job_type = ponos_q.get_job_type(job)
 
             # Call DB API job type method with cache data.
-            shift = getattr(self.ponos_db, '{}_job'.format(job_type))(json_api_resource)
+            shift = getattr(ponos_db, '{}_job'.format(job_type))(json_api_resource)
 
+            # Delete job.
             sqs_message = job[1]
             cache_id = job[2]
-            deleted = self.ponos_q.safe_delete_shift(shift, sqs_message, cache_id)
+            deleted = ponos_q.safe_delete_shift(shift, sqs_message, cache_id)
+
+            if deleted:
+                logger.error('PonosWorker - Create Shift {}'.format(shift.shift_id))
 
             if not deleted:
                 logger.error('PonosWorker - failed job {}'.format(job[2]))
