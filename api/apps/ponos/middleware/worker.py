@@ -14,7 +14,7 @@ from api.apps.ponos.middleware.db import PonosDB
 from api.apps.ponos.middleware.queue import PonosQueue
 
 
-log_file = os.path.abspath(os.path.join(os.getcwd(), '../manager/logs/ponos-worker.log'))
+log_file = os.path.abspath(os.path.join(os.getcwd(), '../api/manager/logs/ponos-worker.log'))
 logging.basicConfig(filename=log_file, level=logging.INFO)
 
 
