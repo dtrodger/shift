@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs Ponos worker as daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/shiftgig/apps/api/manager
+Environment="PATH=/home/rhr/portal/env/bin"
+ExecStart=flask cli_worker_ponos
