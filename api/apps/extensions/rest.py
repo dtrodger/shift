@@ -2,8 +2,7 @@ from flask_restful import Api
 
 from api.apps.utilities.endpoints.req_resp import json_api_error
 
-# Define custom HTTP error response payload. Overides default messages from werkzeug.exceptions
-errors = {
+http_status_codes = error_code_messages = {
     'BadRequest': {
         'message': json_api_error('401', 'Client error', restful_error=True),
     },
@@ -39,20 +38,22 @@ class FlaskRestApi(object):
     def __init__(self):
         self.api = Api
 
-    def init_app(self, app, endpoint_registries):
+    def init_app(self, app, endpoint_registries, http_status_codes):
         """
         Initializes Flask-Restful API class with Flask application context, configures custom error messages
         and registers API endpoints.
 
         Arguments:
              app (Flask instace)
+             endpoint_registries (list): functions to register Resource endpoints on Api instance
+             http_status_codes (dict): custom HTTP status code responses
 
         Return:
             None
         """
 
         # Initialize Flask-Restful instance with Flask application context and custom errors.
-        rest_api = self.api(app, errors=errors)
+        rest_api = self.api(app, errors=http_status_codes)
 
         [endpoint_registry(rest_api) for endpoint_registry in endpoint_registries]
 

@@ -37,13 +37,14 @@ class PonosWorker(Daemon):
 
     def execute(self, app_config):
         app = create_app(app_config)
+
         with app.app_context():
             try:
                 ponos_db = PonosDB()
                 ponos_q = PonosQueue()
                 while True:
                     self.work_jobs(ponos_db, ponos_q, app.logger)
-                    time.sleep(3)
+                    time.sleep(1)
             except Exception as e:
                 app.logger.error('PonosWorker - {}'.format(e.message))
 

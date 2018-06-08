@@ -24,7 +24,7 @@ htmlcov/
 *,cover
 
 # Environment configuration
-api/apps/config.env
+api/apps/*.env
 
 # Api logs
 api/manager/logs/*.log

@@ -25,9 +25,6 @@ class Config(object):
     PROJECT = "Shiftgig"
     BASE_DIR = basedir
 
-    # Logging - https://docs.python.org/2/library/logging.html
-    LOG_FILE = os.path.abspath(os.path.join(BASE_DIR + '/manager/logs/app.log'))
-
     # NOT A PRODUCTION STABLE MEANS OF AUTHENTICATING
     API_TOKEN = os.environ.get('SHIFTGIG_API_TOKEN')
 
@@ -66,6 +63,9 @@ class DevelopmentConfig(Config):
     ENV = 'development'
     DEBUG = True
 
+    # Logging - https://docs.python.org/2/library/logging.html
+    LOG_FILE = os.path.abspath(os.path.join(Config.BASE_DIR + '/manager/logs/api.log'))
+
     # Flask-SQLAlchemy
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
@@ -83,6 +83,9 @@ class TestingConfig(Config):
     DEBUG = True
     TESTING = True
 
+    # Logging - https://docs.python.org/2/library/logging.html
+    LOG_FILE = '/var/log/shift_api/api.log'
+
     # Flask-SQLAlchemy
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
@@ -97,6 +100,9 @@ class StagingConfig(Config):
 
     # Flask
     ENV = 'staging'
+
+    # Logging - https://docs.python.org/2/library/logging.html
+    LOG_FILE = '/var/log/shift_api/api.log'
 
     # Flask-SQLAlchemy
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -115,6 +121,10 @@ class ProductionConfig(Config):
 
     # Flask
     ENV = 'production'
+
+    # Logging - https://docs.python.org/2/library/logging.html
+    API_LOG_FILE = '/var/log/shift_api/api.log'
+    PONOS_WORKER_LOG_FILE = '/var/log/shift_api/ponos-worker.log'
 
     # Flask-SQLAlchemy
     SQLALCHEMY_TRACK_MODIFICATIONS = False

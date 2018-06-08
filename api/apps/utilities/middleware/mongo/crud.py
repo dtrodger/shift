@@ -1,3 +1,5 @@
+from abc import ABCMeta
+
 from flask import current_app
 
 
@@ -5,6 +7,8 @@ class MongoCRUD(object):
     """
     API to handle core CRUD operations against MongoEngine models. Iterface to be inherited by Mongo middleware class.
     """
+
+    __metaclass__ = ABCMeta
 
     @staticmethod
     def create(document, **kwargs):

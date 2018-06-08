@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 import json
 
 from api.apps.extensions.amazon_aws import (
@@ -15,6 +16,9 @@ class Queue(object):
     API for queue CRUD operations. Meant to be inherited by microservice queue class.
     Note that this class is designed to handle management of a SQS q and SNS topic.
     """
+
+    __metaclass__ = ABCMeta
+
     def __init__(self, sns_topic, sns_q):
         # Get Flask application configuration.
         self.config = current_app.config
@@ -28,6 +32,10 @@ class Queue(object):
         self.snsconn = sns_connection(self.config)
         self.sns_topic = sns_topic
         self.sns_message = RawMessage
+
+    @abstractmethod
+    def _add_job(self, *args, **kwargs):
+        pass
 
     def create_job(self, cache_id, job_type, cache_attrs):
         """
