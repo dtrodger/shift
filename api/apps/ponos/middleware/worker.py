@@ -14,10 +14,6 @@ from api.apps.ponos.middleware.db import PonosDB
 from api.apps.ponos.middleware.queue import PonosQueue
 
 
-log_file = os.path.abspath(os.path.join(os.getcwd(), '../manager/logs/ponos-worker.log'))
-logging.basicConfig(filename=log_file, level=logging.INFO)
-
-
 class PonosWorker(Daemon):
     """
     API for Ponos worker to process queued jobs.
@@ -57,24 +53,26 @@ class PonosWorker(Daemon):
         jobs = ponos_q.get_jobs()
 
         for job in jobs:
-            # Deserialize Redis cache record.
-            json_api_resource = ast.literal_eval(job[0])
 
-            # Get job type
-            job_type = ponos_q.get_job_type(job)
+            # Ensure Redis record returned
+            if job[0]:
+                json_api_resource = ast.literal_eval(job[0])
 
-            # Call DB API job type method with cache data.
-            shift = getattr(ponos_db, '{}_job'.format(job_type))(json_api_resource)
+                # Get job type
+                job_type = ponos_q.get_job_type(job)
 
-            # Delete job.
-            sqs_message = job[1]
-            cache_id = job[2]
-            deleted = ponos_q.safe_delete_shift(shift, sqs_message, cache_id)
+                # Call DB API job type method with cache data.
 
-            if deleted:
-                logger.error('PonosWorker - Create Shift {}'.format(shift.shift_id))
+                shift = getattr(ponos_db, '{}_job'.format(job_type))(json_api_resource)
 
-            if not deleted:
-                logger.error('PonosWorker - failed job {}'.format(job[2]))
-                # TODO - handle failed jobs.
+                # Delete job.
+                sqs_message = job[1]
+                cache_id = job[2]
+                deleted = ponos_q.safe_delete_shift(shift, sqs_message, cache_id)
 
+                if deleted:
+                    logger.info('PonosWorker - Create Shift {}'.format(shift.shift_id))
+
+                if not deleted:
+                    logger.error('PonosWorker - failed job {}'.format(job[2]))
+                    # TODO - handle failed jobs.

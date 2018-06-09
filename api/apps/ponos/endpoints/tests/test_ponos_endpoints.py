@@ -57,7 +57,6 @@ class PonosShiftEndpointTests(TestCase):
     def test_post_shift(self):
         resp = self.client.post(url_for('ponos'), data=json.dumps(payload_1), headers=self.headers)
         self.assert200(resp)
-        # TODO - Test more cases
 
 
 
