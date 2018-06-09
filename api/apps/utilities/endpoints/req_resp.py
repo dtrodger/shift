@@ -99,7 +99,7 @@ def json_api_not_found_resp():
         (Flask Response)
     """
 
-    not_found_json = json.dumps({"data": "record not found"})
+    not_found_json = json.dumps({"data": {"message": "resources not found"}})
 
     return json_api_resp(not_found_json)
 
