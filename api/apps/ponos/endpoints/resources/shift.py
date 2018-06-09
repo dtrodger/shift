@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse, abort
 from marshmallow_jsonapi.schema import ValidationError
 
+from api.apps.extensions.cache import flask_cache
 from api.apps.ponos.middleware.db import PonosDB
 from api.apps.ponos.middleware.queue import PonosQueue
 from api.apps.ponos.models.cache.shift import ShiftSchema
@@ -26,6 +27,7 @@ class ShiftEndpoints(Resource):
     def __repr__(self):
         return '<{0}> Flask-Restful Resource'.format(self.__class__.__name__)
 
+    @flask_cache.memoize(timeout=50)
     def get(self, shift_id=None):
         """
         Handles HTTP GET requests to /ponos/shift - /ponos/shift/<string:shift_id>
