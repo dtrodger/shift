@@ -139,7 +139,7 @@ class ProductionConfig(Config):
     SENTRY_DSN = os.environ.get('SENTRY_DSN')
 
 
-def options(option):
+def config_options(option):
     """
     Returns requested configuraiton class
 

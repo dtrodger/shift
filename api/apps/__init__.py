@@ -1,7 +1,7 @@
 from flask import Flask
 
 from api.apps.config import (
-    options,
+    config_options,
     Config
 )
 from api.apps.extensions import initialize_extensions
@@ -21,8 +21,8 @@ def create_app(config='develop', app_name=Config.PROJECT):
         Initialized Flask object.
     """
 
-    config_obj = options(config)
     app = Flask(app_name, static_folder=None)
+    config_obj = config_options(config)
     app.config.from_object(config_obj)
     initialize_extensions(app)
     register_error_handlers(app)
