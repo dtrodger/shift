@@ -123,7 +123,7 @@ class ProductionConfig(Config):
     ENV = 'production'
 
     # Logging - https://docs.python.org/2/library/logging.html
-    API_LOG_FILE = '/var/log/shift_api/api.log'
+    LOG_FILE = '/var/log/shift_api/api.log'
     PONOS_WORKER_LOG_FILE = '/var/log/shift_api/ponos-worker.log'
 
     # Flask-SQLAlchemy
