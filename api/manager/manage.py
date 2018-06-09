@@ -4,7 +4,6 @@ import os
 import click
 
 from api.apps import create_app
-from api.apps.extensions import sqldb
 from api.apps.extensions import mongodb
 from api.apps.ponos.utilities.mock_data import mock_shift_data, drop_ponos_collections
 from api.apps.ponos.utilities.tests_cli import (
@@ -24,7 +23,7 @@ app = create_app(os.getenv('SHIFTGIG_FLASK_CONFIG') or 'develop')
 # Shell context.
 @app.shell_context_processor
 def make_shell_context():
-    return dict(app=app, db=sqldb, mongo=mongodb)
+    return dict(app=app, mongo=mongodb)
 
 
 # Unit tests.
